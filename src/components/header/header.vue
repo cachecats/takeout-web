@@ -65,9 +65,11 @@
         color: rgb(255, 255, 255)
         .shop-name
           margin-top: 2px
+          display: flex
+          flex-direction: row
+          align-items: center
           .brand
             display: inline-block
-            vertical-align: top
             width: 30px
             height: 18px
             bg-img('brand')
@@ -82,18 +84,20 @@
           line-height: 12px
           margin-top: 8px
         .offers
+          display: flex
+          flex-direction: row
+          align-items: center
           margin-top: 10px
           margin-bottom: 2px
+          line-height: 12px
           .icon
             display: inline-block
-            vertical-align: top
             width: 12px
             height: 12px
             background-size: 12px 12px
             background-repeat: no-repeat
             &.decrease
               bg-img('decrease_1')
-              s
             &.discount
               bg-img('discount_1')
             &.special
@@ -103,10 +107,9 @@
             &.guarantee
               bg-img('guarantee_1')
           .offers-text
-            vertical-align: top
             margin-left: 4px
             font-size: 10px
-            line-height: 12px
+            text-align :center
       .support-count
         display: flex
         flex-direction: row
