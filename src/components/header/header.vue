@@ -50,6 +50,7 @@
 
   .header-div
     position: relative
+    overflow: hidden
     background-color: rgba(7, 17, 27, 0.5)
     font-weight: 200
     .content-wrapper
@@ -109,7 +110,7 @@
           .offers-text
             margin-left: 4px
             font-size: 10px
-            text-align :center
+            text-align: center
       .support-count
         display: flex
         flex-direction: row
