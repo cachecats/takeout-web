@@ -32,7 +32,6 @@
     created(){
 
       this.$http.get('static/data.json').then(function (res) {
-        console.log(res.body.seller)
         this.seller = res.body.seller;
       })
     },
@@ -46,7 +45,13 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
+  body
+    padding: 0
+    margin: 0
+
   #app
+    padding: 0
+    margin: 0
     .tab
       display: flex
       flex-direction: row
@@ -59,7 +64,6 @@
         font-size: 14px
         & > a
           display: block
-          text-decoration: none
           &.router-link-active
             color: #f01414
 
