@@ -15,18 +15,41 @@
           <span class="offers-text">{{seller.supports[0].description}}</span>
         </div>
       </div>
-      <div v-if="seller.supports" class="support-count">
+      <div v-if="seller.supports" @click="showDetail" class="support-count">
         <span class="count-text">{{seller.supports.length}}个</span>
         <span class="arrow-icon"></span>
       </div>
     </div>
-    <div class="bulletin-wrapper">
-      <span class="brand"></span>
-      <span class="title">{{seller.bulletin}}</span>
-      <span class="arrow-icon"></span>
+    <div @click="showDetail" class="bulletin-wrapper">
+      <div class="brand"></div>
+      <div class="title">{{seller.bulletin}}</div>
+      <div class="arrow-icon"></div>
     </div>
     <div class="background">
       <img :src="seller.avatar" width="100%" height="100%">
+    </div>
+
+    <!--详情浮层-->
+    <div v-show="isDetailShow" class="detail">
+      <div class="detail-wrapper clearfix">
+        <div class="detail-main">
+          <div>{{seller.bulletin}}</div>
+          <div>{{seller.bulletin}}</div>
+          <div>{{seller.bulletin}}</div>
+          <div>{{seller.bulletin}}</div>
+          <div>{{seller.bulletin}}</div>
+          <div>{{seller.bulletin}}</div>
+          <div>{{seller.bulletin}}</div>
+          <div>{{seller.bulletin}}</div>
+          <div>{{seller.bulletin}}</div>
+          <div>{{seller.bulletin}}</div>
+          <div>{{seller.bulletin}}</div>
+          <div>{{seller.bulletin}}</div>
+        </div>
+      </div>
+      <div class="detail-close">
+        <!--<image src="delete_white.png" width="32" height="32"></image>-->
+      </div>
     </div>
   </div>
 </template>
@@ -38,8 +61,19 @@
         type: Object
       }
     },
+    data(){
+      return {
+        isDetailShow: false
+      }
+    },
     created(){
       this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
+    },
+    methods: {
+      showDetail(){
+        console.log("shows")
+        this.isDetailShow = true
+      }
     }
   }
 </script>
@@ -87,7 +121,7 @@
         .offers
           display: flex
           flex-direction: row
-          align-items: center
+          align-items: cente
           margin-top: 10px
           margin-bottom: 2px
           line-height: 12px
@@ -135,33 +169,29 @@
           background-repeat: no-repeat
           margin-left: 2px
     .bulletin-wrapper
-      position: relative
+      display: flex
+      flex-direction: row
       align-items: center
       height: 28px
-      line-height: 28px
       padding: 0 12px
       background-color: rgba(7, 17, 27, 0.2)
-      text-overflow: ellipsis
-      overflow: hidden
-      white-space: nowrap
       color: #fff
       .brand
-        display: inline-block
-        vertical-align: top
         width: 22px
         height: 12px
-        margin-top: 8px
         background-size: 22px 12px
         background-repeat: no-repeat
         bg-img('bulletin')
       .title
-        vertical-align: top
+        flex: 1
+        line-height: 28px
         font-size: 10px
-        margin: 0 4px 0 0
+        margin: 0 4px
+        text-align: center
+        text-overflow: ellipsis
+        overflow: hidden
+        white-space: nowrap
       .arrow-icon
-        position: absolute
-        right: 10px
-        bottom: 8px
         width: 12px
         height: 12px
         background-image: url("arrow.png")
@@ -175,4 +205,27 @@
       height: 100%
       z-index: -1
       filter: blur(10px)
+    .detail
+      position: fixed
+      left: 0
+      top: 0
+      z-index: 100
+      width: 100%
+      height: 100%
+      overflow: auto
+      background: rgba(7, 17, 27, 0.7)
+      .detail-wrapper
+        min-height: 100%
+        .detail-main
+          margin-top: 64px
+          padding-bottom: 64px
+      .detail-close
+        position: relative
+        width: 32px
+        height: 32px
+        margin: -64px auto 0 auto
+        background-image: url("delete_white.png")
+        background-size: 32px 32px
+
+
 </style>
