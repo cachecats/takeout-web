@@ -33,23 +33,9 @@
     <div v-show="isDetailShow" class="detail">
       <div class="detail-wrapper clearfix">
         <div class="detail-main">
-          <div>{{seller.bulletin}}</div>
-          <div>{{seller.bulletin}}</div>
-          <div>{{seller.bulletin}}</div>
-          <div>{{seller.bulletin}}</div>
-          <div>{{seller.bulletin}}</div>
-          <div>{{seller.bulletin}}</div>
-          <div>{{seller.bulletin}}</div>
-          <div>{{seller.bulletin}}</div>
-          <div>{{seller.bulletin}}</div>
-          <div>{{seller.bulletin}}</div>
-          <div>{{seller.bulletin}}</div>
-          <div>{{seller.bulletin}}</div>
         </div>
       </div>
-      <div class="detail-close">
-        <!--<image src="delete_white.png" width="32" height="32"></image>-->
-      </div>
+      <div class="detail-close" @click="closeDetail"></div>
     </div>
   </div>
 </template>
@@ -61,18 +47,21 @@
         type: Object
       }
     },
-    data(){
+    data () {
       return {
         isDetailShow: false
       }
     },
-    created(){
-      this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
+    created () {
+      this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
     },
     methods: {
-      showDetail(){
-        console.log("shows")
+      showDetail () {
+        console.log('shows')
         this.isDetailShow = true
+      },
+      closeDetail () {
+        this.isDetailShow = false
       }
     }
   }
@@ -226,6 +215,7 @@
         margin: -64px auto 0 auto
         background-image: url("delete_white.png")
         background-size: 32px 32px
+        clear: both
 
 
 </style>
