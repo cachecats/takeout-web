@@ -33,6 +33,7 @@
 
       this.$http.get('static/data.json').then(function (res) {
         this.seller = res.body.seller;
+        console.log(this.seller)
       })
     },
     methods: {
