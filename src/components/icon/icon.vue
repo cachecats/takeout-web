@@ -11,7 +11,7 @@
   export default {
     props: {
       supportType: { //活动类型
-        type: String
+        type: Number
       },
       imgType: { //图片类型.可选值：img1,img2,img3,img4分别对应1,2,3,4四种小icon图标
         type: String
