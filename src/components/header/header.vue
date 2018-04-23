@@ -11,7 +11,7 @@
           <span>{{seller.description}}/{{seller.deliveryTime}}分钟送达</span>
         </div>
         <div v-if="seller.supports" class="offers">
-          <span class="icon" :class="classMap[seller.supports[0].type]"></span>
+          <icon :supportType="seller.supports[0].type" imgType="1"></icon>
           <span class="offers-text">{{seller.supports[0].description}}</span>
         </div>
       </div>
@@ -51,7 +51,9 @@
             <!--活动详情-->
             <div v-if="seller.supports" class="supports">
               <div class="support-item" v-for="item in seller.supports">
-                <span class="icon" :class="classMap[item.type]"></span>
+                <span class="icon-wrapper">
+                  <icon :supportType="item.type" imgType="2"></icon>
+                </span>
                 <span class="text">{{item.description}}</span>
               </div>
             </div>
@@ -78,6 +80,7 @@
 <script type="text/ecmascript-6">
 
   import star from 'components/star/star'
+  import icon from 'components/icon/icon'
 
   export default {
     props: {
@@ -91,7 +94,7 @@
       }
     },
     created () {
-      this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
+
     },
     methods: {
       showDetail () {
@@ -103,7 +106,8 @@
       }
     },
     components: {
-      star: star
+      star,
+      icon
     }
   }
 </script>
@@ -155,22 +159,12 @@
           margin-top: 10px
           margin-bottom: 2px
           line-height: 12px
-          .icon
-            display: inline-block
-            width: 12px
-            height: 12px
-            background-size: 12px 12px
-            background-repeat: no-repeat
-            &.decrease
-              bg-img('decrease_1')
-            &.discount
-              bg-img('discount_1')
-            &.special
-              bg-img('special_1')
-            &.invoice
-              bg-img('invoice_1')
-            &.guarantee
-              bg-img('guarantee_1')
+
+          /*.icon*/
+          /*display: inline-block*/
+          /*width: 12px*/
+          /*height: 12px*/
+
           .offers-text
             margin-left: 4px
             font-size: 10px
@@ -290,23 +284,8 @@
               font-size: 0
               &:last-child
                 margin-bottom: 0
-              .icon
-                display: inline-block
-                width: 16px
-                height: 16px
-                background-repeat: no-repeat
-                background-size: 16px 16px
-                margin-right: 6px
-                &.decrease
-                  bg-img('decrease_2')
-                &.discount
-                  bg-img('discount_2')
-                &.special
-                  bg-img('special_2')
-                &.invoice
-                  bg-img('invoice_2')
-                &.guarantee
-                  bg-img('guarantee_2')
+              .icon-wrapper
+                margin-right : 6px
               .text
                 font-size: 12px
           .bulletin

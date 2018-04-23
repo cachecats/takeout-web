@@ -13,6 +13,7 @@
       </div>
     </div>
     <router-view></router-view>
+
   </div>
 </template>
 
@@ -51,6 +52,8 @@
     margin: 0
 
   #app
+    display: flex
+    flex-direction: column
     padding: 0
     margin: 0
     .tab
@@ -67,6 +70,5 @@
           display: block
           &.router-link-active
             color: #f01414
-
 
 </style>
