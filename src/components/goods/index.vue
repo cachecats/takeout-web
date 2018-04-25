@@ -1,7 +1,7 @@
 <template>
   <div class="goods">
     <!--左侧菜单列表-->
-    <div class="menu-wrapper">
+    <div class="menu-wrapper" ref="menuWrapper">
       <ul>
         <li v-for="item in goods" class="menu-item">
           <span class="icon-wrapper">
@@ -12,7 +12,7 @@
       </ul>
     </div>
     <!--右侧商品列表-->
-    <div class="foods-wrapper">
+    <div class="foods-wrapper" ref="foodsWrapper">
       <ul>
         <li v-for="item in goods" class="goods-item">
           <div class="title">{{item.name}}</div>
@@ -43,6 +43,7 @@
 
 <script>
   import icon from 'components/icon/icon'
+  import BScroll from 'better-scroll'
   export default {
     props: {
       seller: {
@@ -60,7 +61,17 @@
     created(){
       this.$http.get('static/data.json').then((res) => {
         this.goods = res.body.goods;
+        this.$nextTick(() => {
+          this.initBetterScroll();
+        })
       })
+    },
+    methods: {
+      initBetterScroll(){
+        console.log("initBetterScroll")
+        this.menuScroll = new BScroll(this.$refs.menuWrapper, {});
+        this.foodsScroll = new BScroll(this.$refs.foodsWrapper, {});
+      }
     }
 
   }
@@ -134,7 +145,7 @@
             .description
               font-size: 10px
               color: rgb(147, 153, 159)
-              line-height: 10px
+              line-height: 12px
               margin-bottom: 8px
             .sales-rating
               display: flex
