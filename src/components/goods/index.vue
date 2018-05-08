@@ -3,7 +3,8 @@
     <!--左侧菜单列表-->
     <div class="menu-wrapper" ref="menuWrapper">
       <ul>
-        <li v-for="item in goods" class="menu-item">
+        <li v-for="(item, index) in goods" class="menu-item"
+            :class="{'current': currentIndex === index}" @click="clickMenu(index)">
           <span class="icon-wrapper">
             <icon v-if="item.type>=0" :supportType="item.type" imgType="3"></icon>
           </span>
@@ -14,7 +15,7 @@
     <!--右侧商品列表-->
     <div class="foods-wrapper" ref="foodsWrapper">
       <ul>
-        <li v-for="item in goods" class="goods-item">
+        <li v-for="item in goods" class="goods-item goods-item-hook">
           <div class="title">{{item.name}}</div>
           <ul>
             <li v-for="food in item.foods" class="foods-item">
@@ -44,33 +45,80 @@
 <script>
   import icon from 'components/icon/icon'
   import BScroll from 'better-scroll'
+
   export default {
     props: {
       seller: {
         type: Object
       }
     },
-    data(){
+    data () {
       return {
-        goods: {}
+        goods: {},
+        listHeight: [],
+        scrollY: 0
       }
     },
     components: {
       icon
     },
-    created(){
+    created () {
       this.$http.get('static/data.json').then((res) => {
-        this.goods = res.body.goods;
+        this.goods = res.body.goods
         this.$nextTick(() => {
-          this.initBetterScroll();
+          this.initBetterScroll()
+          this.computeHeight()
         })
       })
     },
+
+    computed: {
+      currentIndex () {
+//        console.log(this.scrollY)
+//        console.log(this.listHeight)
+        for (let i = 0; i < this.listHeight.length; i++) {
+          let height = this.listHeight[i]
+          let nextHeight = this.listHeight[i + 1]
+          if (nextHeight && this.scrollY >= height && this.scrollY < nextHeight) {
+//            console.log("当前索引：" + i)
+            return i
+          }
+        }
+        return 0
+      }
+    },
     methods: {
-      initBetterScroll(){
-        console.log("initBetterScroll")
-        this.menuScroll = new BScroll(this.$refs.menuWrapper, {});
-        this.foodsScroll = new BScroll(this.$refs.foodsWrapper, {});
+
+      initBetterScroll () {
+        console.log('initBetterScroll')
+        this.menuScroll = new BScroll(this.$refs.menuWrapper, {
+          click: true
+        })
+        this.foodsScroll = new BScroll(this.$refs.foodsWrapper, {probeType: 3})
+        this.foodsScroll.on('scroll', (pos) => {
+          this.scrollY = Math.abs(Math.round(pos.y))
+        })
+      },
+
+      //计算出每个商品分类的高度，存入列表中
+      computeHeight () {
+        let goodsList = this.$refs.foodsWrapper.getElementsByClassName('goods-item-hook')
+
+        let height = 0
+        this.listHeight.push(height)
+
+        for (let item of goodsList) {
+          height += item.clientHeight
+          this.listHeight.push(height)
+        }
+      },
+
+      clickMenu (index) {
+        console.log(index)
+        let goodsList = this.$refs.foodsWrapper.getElementsByClassName('goods-item-hook')
+        let el = goodsList[index]
+        //滚动到指定元素的位置，动画时间是300毫秒
+        this.foodsScroll.scrollToElement(el,300)
       }
     }
 
@@ -99,9 +147,16 @@
         align-items: center
         height: 54px
         width: 56px
-        margin: 0 12px
+        padding: 0 12px
         line-height: 14px
         border-bottom: 1px solid rgba(7, 17, 27, 0.1)
+        &.current
+          position: relative
+          margin-top: -1px
+          z-index: 10
+          background: #fff
+          font-weight: 700
+          border: none
         .name
           width: 56px
           font-size: 12px
@@ -176,12 +231,12 @@
                 font-size: 10px
                 color: rgb(147, 153, 159)
                 font-weight: normal
-                text-decoration : line-through
+                text-decoration: line-through
               .old-price
                 font-size: 10px
                 color: rgb(147, 153, 159)
                 font-weight: 700
-                text-decoration : line-through
+                text-decoration: line-through
 
 
 </style>
