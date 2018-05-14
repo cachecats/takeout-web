@@ -39,12 +39,14 @@
         </li>
       </ul>
     </div>
+    <shopcart></shopcart>
   </div>
 </template>
 
 <script>
   import icon from 'components/icon/icon'
   import BScroll from 'better-scroll'
+  import shopcart from 'components/shopcart/shopcart'
 
   export default {
     props: {
@@ -60,7 +62,8 @@
       }
     },
     components: {
-      icon
+      icon,
+      shopcart
     },
     created () {
       this.$http.get('static/data.json').then((res) => {
@@ -74,13 +77,10 @@
 
     computed: {
       currentIndex () {
-//        console.log(this.scrollY)
-//        console.log(this.listHeight)
         for (let i = 0; i < this.listHeight.length; i++) {
           let height = this.listHeight[i]
           let nextHeight = this.listHeight[i + 1]
           if (nextHeight && this.scrollY >= height && this.scrollY < nextHeight) {
-//            console.log("当前索引：" + i)
             return i
           }
         }
