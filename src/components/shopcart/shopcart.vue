@@ -3,17 +3,17 @@
     <div class="content">
       <div class="left-content">
         <div class="logo-wrapper">
-          <div class="icon-wrapper">
+          <div class="icon-wrapper" :class="{'highlight': totalCount>0}">
             <img :src='shopcartImg' class="icon"/>
           </div>
-          <div class="count">{{totalCount}}</div>
+          <div class="count" v-show="totalCount > 0">{{totalCount}}</div>
         </div>
-        <div class="price">¥{{totalPrice}}</div>
+        <div class="price" :class="{'highlight': totalPrice>0}">¥{{totalPrice}}</div>
         <div class="vertical-line"></div>
         <div class="desc">另需配送费{{deliveryPrice}}元</div>
       </div>
-      <div class="right-content">
-        <span class="right-text">¥ {{minPrice}}起送</span>
+      <div class="right-content" :class="descClass">
+        {{payDesc}}
       </div>
     </div>
   </div>
@@ -57,9 +57,25 @@
         return count
       },
       shopcartImg(){
-        let path = this.totalCount > 0 ? "../../assets/img/shopcart_white.png" : "../../assets/img/shopcart.png"
-        console.log(path)
+        let path = this.totalCount > 0 ? require("../../assets/img/shopcart_white.png") : require("../../assets/img/shopcart.png")
         return path
+      },
+      payDesc(){
+        if (this.totalPrice === 0) {
+          return `¥${this.minPrice}起送`
+        } else if (this.totalPrice < this.minPrice) {
+          let diff = this.minPrice - this.totalPrice
+          return `还差¥${diff}元起送`
+        } else {
+          return '去结算'
+        }
+      },
+      descClass(){
+        if (this.totalPrice >= this.minPrice) {
+          return 'enough'
+        } else {
+          return 'not-enough'
+        }
       }
     },
     data(){
@@ -113,14 +129,14 @@
             right: 0
             width: 24px
             height: 16px
-            line-height : 16px
-            border-radius : 16px
-            text-align : center
-            font-size : 9px
-            font-weight : 700
-            background: rgb(240,20,20)
+            line-height: 16px
+            border-radius: 16px
+            text-align: center
+            font-size: 12px
+            font-weight: 700
+            background: rgb(240, 20, 20)
             color: #fff
-            box-shadow : 0 4px 8px 0 rgba(0,0,0,0.4)
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4)
           .icon-wrapper
             display: flex
             align-items: center
@@ -129,6 +145,8 @@
             height: 44px
             border-radius: 50%
             background: #2b343c
+            &.highlight
+              background: #00A0DC
           .icon
             width: 25px
             height: 25px
@@ -138,6 +156,8 @@
           color: #919396
           align-self: center
           font-weight: 700
+          &.highlight
+            color: #fff
         .vertical-line
           width: 1px
           height: 60%
@@ -157,9 +177,12 @@
         width: 105px
         height: 100%
         background-color: #2b333b
-        .right-text
-          font-size: 12px
-          font-weight: 700
-          color: rgba(255, 255, 255, 0.4)
-
+        font-size: 12px
+        font-weight: 700
+        color: rgba(255, 255, 255, 0.4)
+        &.not-enough
+          background-color: #2b333b
+        &.enough
+          background: #00b43c
+          color: #fff
 </style>
