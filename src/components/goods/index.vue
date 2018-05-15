@@ -28,10 +28,15 @@
                   <span class="rating">好评率{{food.rating}}%</span>
                 </div>
                 <div class="price-wrapper">
-                  <span class="rmb">¥</span>
-                  <span class="price">{{food.price}}</span>
-                  <span v-if="food.oldPrice" class="old-rmb">¥</span>
-                  <span v-if="food.oldPrice" class="old-price">{{food.oldPrice}}</span>
+                  <div class="left-wrapper">
+                    <span class="rmb">¥</span>
+                    <span class="price">{{food.price}}</span>
+                    <span v-if="food.oldPrice" class="old-rmb">¥</span>
+                    <span v-if="food.oldPrice" class="old-price">{{food.oldPrice}}</span>
+                  </div>
+                  <div class="cartcontrol-wrapper">
+                    <cartcontrol :food="food"></cartcontrol>
+                  </div>
                 </div>
               </div>
             </li>
@@ -47,6 +52,7 @@
   import icon from 'components/icon/icon'
   import BScroll from 'better-scroll'
   import shopcart from 'components/shopcart/shopcart'
+  import cartcontrol from 'components/cartcontrol/cartcontrol'
 
   export default {
     props: {
@@ -63,7 +69,8 @@
     },
     components: {
       icon,
-      shopcart
+      shopcart,
+      cartcontrol
     },
     created () {
       this.$http.get('static/data.json').then((res) => {
@@ -94,7 +101,10 @@
         this.menuScroll = new BScroll(this.$refs.menuWrapper, {
           click: true
         })
-        this.foodsScroll = new BScroll(this.$refs.foodsWrapper, {probeType: 3})
+        this.foodsScroll = new BScroll(this.$refs.foodsWrapper, {
+          probeType: 3,
+          click: true
+        })
         this.foodsScroll.on('scroll', (pos) => {
           this.scrollY = Math.abs(Math.round(pos.y))
         })
@@ -217,26 +227,32 @@
               display: flex
               flex-direction: row
               line-height: 24px
-              align-items baseline
-              .rmb
-                font-size: 10px
-                color: red
-                font-weight: normal
-              .price
-                font-size: 14px
-                color: red
-                font-weight: 700
-                margin-right: 8px
-              .old-rmb
-                font-size: 10px
-                color: rgb(147, 153, 159)
-                font-weight: normal
-                text-decoration: line-through
-              .old-price
-                font-size: 10px
-                color: rgb(147, 153, 159)
-                font-weight: 700
-                text-decoration: line-through
-
+              align-items: center
+              .left-wrapper
+                display: flex
+                flex:1
+                .rmb
+                  font-size: 10px
+                  color: red
+                  font-weight: normal
+                .price
+                  font-size: 14px
+                  color: red
+                  font-weight: 700
+                  margin-right: 8px
+                .old-rmb
+                  font-size: 10px
+                  color: rgb(147, 153, 159)
+                  font-weight: normal
+                  text-decoration: line-through
+                .old-price
+                  font-size: 10px
+                  color: rgb(147, 153, 159)
+                  font-weight: 700
+                  text-decoration: line-through
+              .cartcontrol-wrapper
+                display: flex
+                align-items : flex-end
+                justify-content: bottom
 
 </style>
