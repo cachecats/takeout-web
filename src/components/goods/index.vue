@@ -44,7 +44,7 @@
         </li>
       </ul>
     </div>
-    <shopcart :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></shopcart>
+    <shopcart :select-foods="selectFoods" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></shopcart>
   </div>
 </template>
 
@@ -62,7 +62,7 @@
     },
     data () {
       return {
-        goods: {},
+        goods: [],
         listHeight: [],
         scrollY: 0
       }
@@ -92,6 +92,18 @@
           }
         }
         return 0
+      },
+
+      selectFoods(){
+        let selectFoodList = []
+        this.goods.forEach((good) => {
+          good.foods.forEach((food) => {
+            if (food.count) {
+              selectFoodList.push(food)
+            }
+          })
+        })
+        return selectFoodList
       }
     },
     methods: {
@@ -128,7 +140,7 @@
         let goodsList = this.$refs.foodsWrapper.getElementsByClassName('goods-item-hook')
         let el = goodsList[index]
         //滚动到指定元素的位置，动画时间是300毫秒
-        this.foodsScroll.scrollToElement(el,300)
+        this.foodsScroll.scrollToElement(el, 300)
       }
     }
 
@@ -230,7 +242,7 @@
               align-items: center
               .left-wrapper
                 display: flex
-                flex:1
+                flex: 1
                 .rmb
                   font-size: 10px
                   color: red
@@ -252,7 +264,7 @@
                   text-decoration: line-through
               .cartcontrol-wrapper
                 display: flex
-                align-items : flex-end
+                align-items: flex-end
                 justify-content: bottom
 
 </style>

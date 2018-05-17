@@ -16,6 +16,13 @@
         {{payDesc}}
       </div>
     </div>
+    <div class="shopcart-list" v-if="">
+      <div class="list-header">
+        <span class="cart">购物车</span>
+        <span class="clear">清空</span>
+      </div>
+      <div class="list-content">列表内容</div>
+    </div>
   </div>
 </template>
 
@@ -31,12 +38,7 @@
       selectFoods: {
         type: Array,
         default(){
-          return [
-            {
-              price: 10,
-              number: 2
-            }
-          ]
+          return []
         }
       }
     },
@@ -45,14 +47,14 @@
       totalPrice(){
         let price = 0
         this.selectFoods.forEach((food) => {
-          price += food.price * food.number
+          price += food.price * food.count
         })
         return price
       },
       totalCount(){
         let count = 0
         this.selectFoods.forEach((food) => {
-          count += food.number
+          count += food.count
         })
         return count
       },
