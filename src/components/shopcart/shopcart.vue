@@ -1,6 +1,6 @@
 <template>
   <div class="shopcart">
-    <div class="content">
+    <div class="content" @click="toggleMask()">
       <div class="left-content">
         <div class="logo-wrapper">
           <div class="icon-wrapper" :class="{'highlight': totalCount>0}">
@@ -16,7 +16,7 @@
         {{payDesc}}
       </div>
     </div>
-    <div class="shopcart-list" v-if="">
+    <div class="shopcart-list" v-if="showCartList">
       <div class="list-header">
         <span class="cart">购物车</span>
         <span class="clear">清空</span>
@@ -40,8 +40,15 @@
         default(){
           return []
         }
+      },
+    },
+
+    data(){
+      return {
+        maskShow: false
       }
     },
+
     components: {},
     computed: {
       totalPrice(){
@@ -78,17 +85,28 @@
         } else {
           return 'not-enough'
         }
+      },
+
+      //判断是否显示购物车列表
+      showCartList(){
+        if(this.totalCount === 0){
+          return false
+        }
+        return this.maskShow
       }
-    },
-    data(){
-      return {}
+
     },
 
     created(){
 
     },
 
-    methods: {},
+    methods: {
+      toggleMask(){
+        this.maskShow = !this.maskShow
+        console.log(this.maskShow)
+      }
+    },
   }
 
 </script>
@@ -187,4 +205,7 @@
         &.enough
           background: #00b43c
           color: #fff
+    .shopcart-list
+      width: 100%
+      z-index: 60
 </style>
