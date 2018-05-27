@@ -303,6 +303,7 @@
           color: rgb(240,20,20)
           font-weight : 700
           line-height : 24px
+          margin-right : 6px
     .mask
       position: absolute
       bottom: 48px

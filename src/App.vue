@@ -12,34 +12,36 @@
         <router-link to="/seller">商家</router-link>
       </div>
     </div>
-    <router-view :seller="seller"></router-view>
+    <keep-alive>
+      <router-view :seller="seller"></router-view>
+    </keep-alive>
 
   </div>
 </template>
 
 <script>
-  import Header from "./components/header/header.vue"
+  import Header from './components/header/header.vue'
 
   export default {
-    data(){
+    data () {
       return {
         seller: {}
       }
     },
     components: {
-      "my-header": Header,
+      'my-header': Header,
     },
 
-    created(){
+    created () {
 
       this.$http.get('static/data.json').then(function (res) {
-        this.seller = res.body.seller;
+        this.seller = res.body.seller
         console.log(this.seller)
       })
     },
     methods: {
-      getSellerData(){
-        console.log("getSellerData")
+      getSellerData () {
+        console.log('getSellerData')
 
       }
     }
