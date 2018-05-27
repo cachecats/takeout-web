@@ -12,21 +12,32 @@
         <div class="vertical-line"></div>
         <div class="desc">另需配送费{{deliveryPrice}}元</div>
       </div>
-      <div class="right-content" :class="descClass">
+      <div class="right-content" :class="descClass" @click.stop="checkOut">
         {{payDesc}}
       </div>
     </div>
     <div class="shopcart-list" v-if="showCartList">
       <div class="list-header">
         <span class="cart">购物车</span>
-        <span class="clear">清空</span>
+        <span class="clear" @click="clearCart">清空</span>
       </div>
-      <div class="list-content">列表内容</div>
+      <div class="list-item" v-for="(item, index) in selectFoods">
+        <span class="name">{{item.name}}</span>
+        <span class="rmb">¥</span>
+        <span class="price">{{item.price}}</span>
+        <span>
+          <cartcontrol :food="item"></cartcontrol>
+        </span>
+      </div>
     </div>
+    <div class="mask" ref="mask" :hidden="!showCartList" @click="hideMask"></div>
   </div>
 </template>
 
 <script>
+
+  import cartcontrol from '../cartcontrol/cartcontrol.vue'
+
   export default {
     props: {
       deliveryPrice: {
@@ -37,39 +48,45 @@
       },
       selectFoods: {
         type: Array,
-        default(){
+        default () {
           return []
         }
       },
     },
 
-    data(){
+    data () {
       return {
         maskShow: false
       }
     },
 
-    components: {},
+    components: {
+      cartcontrol
+    },
     computed: {
-      totalPrice(){
+      totalPrice () {
         let price = 0
         this.selectFoods.forEach((food) => {
           price += food.price * food.count
         })
         return price
       },
-      totalCount(){
+      totalCount () {
         let count = 0
         this.selectFoods.forEach((food) => {
           count += food.count
         })
+
+        if(count === 0){
+          this.maskShow = false
+        }
         return count
       },
-      shopcartImg(){
-        let path = this.totalCount > 0 ? require("../../assets/img/shopcart_white.png") : require("../../assets/img/shopcart.png")
+      shopcartImg () {
+        let path = this.totalCount > 0 ? require('../../assets/img/shopcart_white.png') : require('../../assets/img/shopcart.png')
         return path
       },
-      payDesc(){
+      payDesc () {
         if (this.totalPrice === 0) {
           return `¥${this.minPrice}起送`
         } else if (this.totalPrice < this.minPrice) {
@@ -79,7 +96,7 @@
           return '去结算'
         }
       },
-      descClass(){
+      descClass () {
         if (this.totalPrice >= this.minPrice) {
           return 'enough'
         } else {
@@ -88,23 +105,47 @@
       },
 
       //判断是否显示购物车列表
-      showCartList(){
-        if(this.totalCount === 0){
+      showCartList () {
+        if (this.totalCount === 0) {
           return false
         }
         return this.maskShow
-      }
+      },
 
     },
 
-    created(){
-
+    created () {
+      this.$nextTick(() => {
+        let h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
+        console.log('屏幕高度：' + h)
+        this.$refs.mask.style.height = h + 'px'
+      })
     },
 
     methods: {
-      toggleMask(){
-        this.maskShow = !this.maskShow
-        console.log(this.maskShow)
+      toggleMask () {
+        if (this.totalCount !== 0) {
+          this.maskShow = !this.maskShow
+        }
+      },
+      hideMask(){
+        this.maskShow = false
+      },
+
+      //清空购物车
+      clearCart(){
+        this.selectFoods.forEach((food) => {
+          if(food.count){
+            food.count = 0
+          }
+        })
+      },
+
+      //结账
+      checkOut(){
+        if (this.totalPrice >= this.minPrice) {
+          window.alert("结账")
+        }
       }
     },
   }
@@ -120,6 +161,7 @@
     height: 48px
     z-index: 50
     background-color: #131d26
+    box-sizing : border-box
     .content
       display: flex
       width: 100%
@@ -143,6 +185,7 @@
           background: #131d26
           margin: 0 12px
           padding: 6px
+          z-index: 70
           .count
             position: absolute
             top: 0
@@ -206,6 +249,64 @@
           background: #00b43c
           color: #fff
     .shopcart-list
-      width: 100%
+      position: absolute
+      bottom: 48px
       z-index: 60
+      display: flex
+      flex-direction: column
+      width: 100%
+      height: 300px
+      background: #fff
+      font-weight : 200
+      box-sizing : border-box
+      .list-header
+        display: flex
+        width: 100%
+        height: 40px
+        line-height : 40px
+        padding: 0 18px
+        align-items : center
+        justify-content: space-between
+        box-sizing : border-box
+        background: #f3f5f7
+        border-bottom : 1px solid rgba(7,17,27,0.1)
+        .cart
+          color: rgb(7,17,27)
+          font-size : 14px
+          line-height : 40px
+        .clear
+          color: rgb(0,160,220)
+          font-size : 12px
+          line-height : 40px
+      .list-item
+        display: flex
+        align-items : center
+        height: 48px
+        line-height : 48px
+        margin: 0 18px
+        box-sizing : border-box
+        white-space : nowrap
+        overflow-x : hidden
+        border-bottom : solid 1px rgba(7,17,27,0.1)
+        .name
+          flex: 1
+          font-size : 14px
+          line-height : 24px
+          color: rgb(7,17,27)
+        .rmb
+          font-size : 10px
+          color: rgb(240,20,20)
+          font-weight : normal
+          line-height : 24px
+        .price
+          font-size : 12px
+          color: rgb(240,20,20)
+          font-weight : 700
+          line-height : 24px
+    .mask
+      position: absolute
+      bottom: 48px
+      width: 100%
+      z-index: 55
+      background: rgba(0, 0, 0, 0.4)
 </style>
