@@ -18,7 +18,7 @@
         <li v-for="item in goods" class="goods-item goods-item-hook">
           <div class="title">{{item.name}}</div>
           <ul>
-            <li v-for="food in item.foods" class="foods-item">
+            <li v-for="food in item.foods" class="foods-item" @click="clickFood(food)">
               <img :src="food.icon" width="57" height="57" class="icon">
               <div class="content">
                 <h2 class="name">{{food.name}}</h2>
@@ -44,7 +44,9 @@
         </li>
       </ul>
     </div>
+    <food-detail :food="selectedFood" ref="foodDetail"></food-detail>
     <shopcart :select-foods="selectFoods" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></shopcart>
+
   </div>
 </template>
 
@@ -53,6 +55,7 @@
   import BScroll from 'better-scroll'
   import shopcart from 'components/shopcart/shopcart'
   import cartcontrol from 'components/cartcontrol/cartcontrol'
+  import food from 'components/food/food'
 
   export default {
     props: {
@@ -64,13 +67,15 @@
       return {
         goods: [],
         listHeight: [],
-        scrollY: 0
+        scrollY: 0,
+        selectedFood: {}
       }
     },
     components: {
       icon,
       shopcart,
-      cartcontrol
+      cartcontrol,
+      foodDetail: food
     },
     created () {
       this.$http.get('static/data.json').then((res) => {
@@ -141,6 +146,10 @@
         let el = goodsList[index]
         //滚动到指定元素的位置，动画时间是300毫秒
         this.foodsScroll.scrollToElement(el, 300)
+      },
+
+      clickFood(food){
+        this.selectedFood = food
       }
     }
 
