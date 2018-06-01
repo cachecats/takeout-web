@@ -44,9 +44,8 @@
         </li>
       </ul>
     </div>
-    <food-detail :food="selectedFood" ref="foodDetail"></food-detail>
     <shopcart :select-foods="selectFoods" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></shopcart>
-
+    <food-detail :food="selectedFood" ref="foodDetail"></food-detail>
   </div>
 </template>
 
@@ -150,6 +149,7 @@
 
       clickFood(food){
         this.selectedFood = food
+        this.$refs.foodDetail.showFood()
       }
     }
 
