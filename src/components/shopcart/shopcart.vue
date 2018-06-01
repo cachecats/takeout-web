@@ -38,6 +38,7 @@
 
   import cartcontrol from '../cartcontrol/cartcontrol.vue'
 
+
   export default {
     props: {
       deliveryPrice: {
