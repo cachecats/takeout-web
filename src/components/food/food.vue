@@ -24,8 +24,12 @@
               <span class="old-price">{{food.oldPrice}}</span>
             </div>
           </div>
-          <div class="add-cart" v-show="!food.count || food.count == 0" @click="addToCart">加入购物车</div>
-          <cartcontrol :food="food" v-show="food.count || food.count > 0"></cartcontrol>
+          <transition name="fade">
+            <div class="add-cart" v-show="!food.count || food.count == 0" @click="addToCart">加入购物车</div>
+          </transition>
+          <div class="cart-controll-wrapper">
+            <cartcontrol :food="food" v-show="food.count || food.count > 0"></cartcontrol>
+          </div>
         </div>
       </div>
     </div>
@@ -43,7 +47,7 @@
         type: Object
       }
     },
-    components:{
+    components: {
       cartcontrol
     },
     data () {
@@ -77,8 +81,10 @@
   .move-enter-active, .move-leave-active
     transition: all .2s linear
     transform: translate3d(0, 0, 0)
+
   .move-enter, .move-leave-to
     transform: translate3d(100%, 0, 0)
+
   .food-detail
     position: fixed
     left: 0
@@ -111,7 +117,7 @@
       flex-direction: column
       width: 100%
       padding: 18px
-      box-sizing : border-box
+      box-sizing: border-box
       .name
         font-size: 14px
         line-height: 14px
@@ -131,11 +137,10 @@
         flex-direction: row
         align-items: center
         margin-top: 18px
-        box-sizing : border-box
+        box-sizing: border-box
         .price-wrapper
           display: flex
           align-items: center
-          flex: 1
           .price-now-wrapper
             display: flex
             align-items: baseline
@@ -162,13 +167,23 @@
               font-size: 10px
               font-weight: 700
               line-height: 24px
+        .fade-enter-active, .fade-leave-active
+          transition : all 0.2s
+          opacity: 1
+        .fade-enter, .fade-leave-to
+          opacity: 0
         .add-cart
+          position: absolute
+          right: 18px
           font-size: 10px
           color: #fff
-          text-align : center
+          text-align: center
           border-radius: 12px
           background-color: rgb(0, 160, 200)
           padding: 6px 12px
+        .cart-controll-wrapper
+          position: absolute
+          right: 18px
 
 
 </style>
