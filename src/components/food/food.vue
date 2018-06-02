@@ -32,6 +32,10 @@
           </div>
         </div>
       </div>
+      <split></split>
+      <div class="info-wrapper">
+
+      </div>
     </div>
   </transition>
 </template>
@@ -40,6 +44,7 @@
 
   import Vue from 'vue'
   import cartcontrol from 'components/cartcontrol/cartcontrol'
+  import split from 'components/split/split'
 
   export default {
     props: {
@@ -48,7 +53,8 @@
       }
     },
     components: {
-      cartcontrol
+      cartcontrol,
+      split
     },
     data () {
       return {
@@ -133,6 +139,7 @@
           line-height: 10px
           margin-right: 12px
       .bottom-wrapper
+        position: relative
         display: flex
         flex-direction: row
         align-items: center
@@ -174,7 +181,7 @@
           opacity: 0
         .add-cart
           position: absolute
-          right: 18px
+          right: 0
           font-size: 10px
           color: #fff
           text-align: center
@@ -183,7 +190,7 @@
           padding: 6px 12px
         .cart-controll-wrapper
           position: absolute
-          right: 18px
+          right: 0px
 
 
 </style>
