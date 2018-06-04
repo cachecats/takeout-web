@@ -1,40 +1,47 @@
 <template>
   <transition name="move">
-    <div class="food-detail" v-if="showFlag">
-      <div class="image-header">
-        <img :src="food.image"/>
-        <div class="back" @click="goBack">
-          <i class="icon-arrow_lift"></i>
-        </div>
-      </div>
-      <div class="content-wrapper">
-        <div class="name">{{food.name}}</div>
-        <div class="sell-wrapper">
-          <span class="sell-count">{{"月售" + food.sellCount + "份"}}</span>
-          <span class="rating">{{"好评率" + food.rating + "%"}}</span>
-        </div>
-        <div class="bottom-wrapper">
-          <div class="price-wrapper">
-            <div class="price-now-wrapper">
-              <span class="rmb">¥</span>
-              <span class="current-price">{{food.price}}</span>
-            </div>
-            <div class="price-old-wrapper" v-show="food.oldPrice">
-              <span class="rmb">¥</span>
-              <span class="old-price">{{food.oldPrice}}</span>
-            </div>
-          </div>
-          <transition name="fade">
-            <div class="add-cart" v-show="!food.count || food.count == 0" @click="addToCart">加入购物车</div>
-          </transition>
-          <div class="cart-controll-wrapper">
-            <cartcontrol :food="food" v-show="food.count || food.count > 0"></cartcontrol>
+    <div class="food" ref="food" v-show="showFlag">
+      <div class="food-detail">
+        <div class="image-header">
+          <img :src="food.image"/>
+          <div class="back" @click="goBack">
+            <i class="icon-arrow_lift"></i>
           </div>
         </div>
-      </div>
-      <split></split>
-      <div class="info-wrapper">
-
+        <div class="content-wrapper">
+          <div class="name">{{food.name}}</div>
+          <div class="sell-wrapper">
+            <span class="sell-count">{{"月售" + food.sellCount + "份"}}</span>
+            <span class="rating">{{"好评率" + food.rating + "%"}}</span>
+          </div>
+          <div class="bottom-wrapper">
+            <div class="price-wrapper">
+              <div class="price-now-wrapper">
+                <span class="rmb">¥</span>
+                <span class="current-price">{{food.price}}</span>
+              </div>
+              <div class="price-old-wrapper" v-show="food.oldPrice">
+                <span class="rmb">¥</span>
+                <span class="old-price">{{food.oldPrice}}</span>
+              </div>
+            </div>
+            <transition name="fade">
+              <div class="add-cart" v-show="!food.count || food.count == 0" @click="addToCart">加入购物车</div>
+            </transition>
+            <div class="cart-controll-wrapper">
+              <cartcontrol :food="food" v-show="food.count || food.count > 0"></cartcontrol>
+            </div>
+          </div>
+        </div>
+        <split v-show="food.info"></split>
+        <div class="info-wrapper" v-show="food.info">
+          <div class="title">商品介绍</div>
+          <div class="info">{{food.info}}</div>
+        </div>
+        <split></split>
+        <div class="rating">
+          <div class="title">商品评价</div>
+        </div>
       </div>
     </div>
   </transition>
@@ -45,6 +52,7 @@
   import Vue from 'vue'
   import cartcontrol from 'components/cartcontrol/cartcontrol'
   import split from 'components/split/split'
+  import BScroll from 'better-scroll'
 
   export default {
     props: {
@@ -67,6 +75,18 @@
     methods: {
       showFood () {
         this.showFlag = true
+        //注意：better-scroll 必须只有一个子元素
+        //在组件显示时初始化
+        this.$nextTick(() => {
+          //因为可能会多次显示隐藏，加判断防止重复初始化
+          if (!this.scroll) {
+            this.scroll = new BScroll(this.$refs.food, {
+              click: true
+            })
+          } else {
+            this.scroll.refresh()
+          }
+        })
       },
 
       //返回
@@ -91,12 +111,12 @@
   .move-enter, .move-leave-to
     transform: translate3d(100%, 0, 0)
 
-  .food-detail
+  .food
     position: fixed
     left: 0
     top: 0
+    bottom: 48px
     width: 100%
-    height: 100%
     background-color: white
     z-index: 30
     .image-header
@@ -175,7 +195,7 @@
               font-weight: 700
               line-height: 24px
         .fade-enter-active, .fade-leave-active
-          transition : all 0.2s
+          transition: all 0.2s
           opacity: 1
         .fade-enter, .fade-leave-to
           opacity: 0
@@ -192,5 +212,23 @@
           position: absolute
           right: 0px
 
+    .info-wrapper
+      padding: 18px
+      .title
+        font-size: 14px
+        color: rgb(7, 17, 27)
+        line-height: 14px
+      .info
+        font-size: 12px
+        color: rgb(77, 85, 93)
+        line-height: 24px
+        padding: 8px
+    .rating
+      margin-top : 18px
+      .title
+        font-size: 14px
+        color: rgb(7, 17, 27)
+        line-height: 14px
+        padding-left : 18px
 
 </style>
