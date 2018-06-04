@@ -1,11 +1,14 @@
 <template>
   <div class="rating-select">
     <div class="label-wrapper">
-      <span class="label positive" :class="{active: selectType === 0}" @click="chooseType(0)">{{desc.all}}<span class="num">47</span></span>
-      <span class="label positive" :class="{active: selectType === 1}" @click="chooseType(1)">{{desc.positive}}<span
-        class="num">40</span></span>
-      <span class="label negative" :class="{active: selectType === 2}" @click="chooseType(2)">{{desc.negative}}<span
-        class="num">7</span></span>
+      <span class="label positive" :class="{active: selectType === 0}"
+            @click="chooseType(0)">{{desc.all}}<span class="num">{{ratings.length}}</span></span>
+      <span class="label positive" :class="{active: selectType === 1}"
+            @click="chooseType(1)">{{desc.positive}}<span
+        class="num">{{positiveRatings.length}}</span></span>
+      <span class="label negative" :class="{active: selectType === 2}"
+            @click="chooseType(2)">{{desc.negative}}<span
+        class="num">{{negativeRatings.length}}</span></span>
     </div>
     <div class="content">
       <i class="icon-check_circle" :class="{active: onlyContent}" @click="toggleCheck"></i>
@@ -16,15 +19,15 @@
 
 <script>
 
-  const ALL = 0;
-  const POSITIVE = 1;
-  const NEGATIVE = 2;
+  const ALL = 0
+  const POSITIVE = 1
+  const NEGATIVE = 2
 
   export default {
     props: {
       ratings: {
         type: Array,
-        default(){
+        default () {
           return []
         }
       },
@@ -38,7 +41,7 @@
       },
       desc: {
         type: Object,
-        default(){
+        default () {
           return {
             all: '全部',
             positive: '推荐',
@@ -48,14 +51,26 @@
       }
     },
     components: {},
+    computed: {
+      positiveRatings () {
+        return this.ratings.filter((rating) => {
+          return rating.rateType === 0
+        })
+      },
+      negativeRatings () {
+        return this.ratings.filter((rating) => {
+          return rating.rateType === 1
+        })
+      }
+    },
     methods: {
       //切换check的状态
-      toggleCheck(){
-        this.$emit("toggleCheck")
+      toggleCheck () {
+        this.$emit('toggleCheck')
       },
       //选择类型
-      chooseType(type){
-        this.$emit("chooseType", type)
+      chooseType (type) {
+        this.$emit('chooseType', type)
       }
     }
   }
