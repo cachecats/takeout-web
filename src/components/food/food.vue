@@ -41,6 +41,9 @@
         <split></split>
         <div class="rating">
           <div class="title">商品评价</div>
+          <ratingselect :ratings="food.ratings" :selectType="selectType"
+              :onlyContent="onlyContent" :desc="{all: '全部', positive: '推荐', negative: '吐槽'}"
+              @toggleCheck="toggleRatingCheck" @chooseType="reselectType"></ratingselect>
         </div>
       </div>
     </div>
@@ -53,6 +56,11 @@
   import cartcontrol from 'components/cartcontrol/cartcontrol'
   import split from 'components/split/split'
   import BScroll from 'better-scroll'
+  import ratingselect from 'components/ratingselect/ratingselect'
+
+  const ALL = 0;
+  const POSITIVE = 1;
+  const NEGATIVE = 2;
 
   export default {
     props: {
@@ -62,11 +70,14 @@
     },
     components: {
       cartcontrol,
-      split
+      split,
+      ratingselect
     },
     data () {
       return {
-        showFlag: false
+        showFlag: false,
+        onlyContent: true,
+        selectType: ALL
       }
     },
     created () {
@@ -97,6 +108,16 @@
       //添加到购物车
       addToCart(){
         Vue.set(this.food, "count", 1)
+      },
+
+      //子组件发送的转换check事件
+      toggleRatingCheck(){
+        this.onlyContent = !this.onlyContent
+      },
+
+      //子组件发送的选择类型事件
+      reselectType(type){
+        this.selectType = type
       }
     }
   }
