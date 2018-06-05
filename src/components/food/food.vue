@@ -45,6 +45,21 @@
               :onlyContent="onlyContent" :desc="{all: '全部', positive: '推荐', negative: '吐槽'}"
               @toggleCheck="toggleRatingCheck" @chooseType="reselectType"></ratingselect>
         </div>
+        <div class="no-comment" v-show="!food.ratings || !food.ratings.length">暂无评价</div>
+        <div class="comment-wrapper"  v-show="food.ratings && food.ratings.length">
+          <div class="comment-item" v-for="rating in food.ratings"
+               v-show='showRating(rating)'>
+            <div class="time">{{rating.rateTime}}</div>
+            <div class="content">
+              <span :class="{'icon-thumb_up': rating.rateType === 0, 'icon-thumb_down': rating.rateType === 1}"></span>
+              <span class="text">{{rating.text}}</span>
+            </div>
+            <div class="user">
+              <span class="username">{{rating.username}}</span>
+              <img class="avatar" :src="rating.avatar" width="12" height="12"/>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </transition>
@@ -58,9 +73,9 @@
   import BScroll from 'better-scroll'
   import ratingselect from 'components/ratingselect/ratingselect'
 
-  const ALL = 0;
-  const POSITIVE = 1;
-  const NEGATIVE = 2;
+  const ALL = 2;
+  const POSITIVE = 0;
+  const NEGATIVE = 1;
 
   export default {
     props: {
@@ -76,7 +91,7 @@
     data () {
       return {
         showFlag: false,
-        onlyContent: true,
+        onlyContent: false,
         selectType: ALL
       }
     },
@@ -118,6 +133,17 @@
       //子组件发送的选择类型事件
       reselectType(type){
         this.selectType = type
+      },
+
+      showRating(rating){
+        if(this.onlyContent && !rating.text){
+          return false
+        }
+        if(rating.rateType === this.selectType || this.selectType===ALL){
+          return true
+        }else{
+          return false
+        }
       }
     }
   }
@@ -128,10 +154,8 @@
   .move-enter-active, .move-leave-active
     transition: all .2s linear
     transform: translate3d(0, 0, 0)
-
   .move-enter, .move-leave-to
     transform: translate3d(100%, 0, 0)
-
   .food
     position: fixed
     left: 0
@@ -251,5 +275,52 @@
         color: rgb(7, 17, 27)
         line-height: 14px
         padding-left : 18px
+
+    .no-comment
+      font-size : 12px
+      line-height : 16px
+      color: rgb(7,17,27)
+      padding: 16px 18px
+    .comment-wrapper
+      padding: 0 18px
+      font-size : 0
+      .comment-item
+        position: relative
+        padding: 16px 0
+        border-bottom : 1px solid rgba(7,17,27,0.1)
+        .content
+          margin-top : 6px
+          .text
+            font-size : 12px
+            line-height : 16px
+            color: rgb(7,17,27)
+            margin-left : 4px
+          .icon-thumb_up
+            font-size : 12px
+            line-height : 24px
+            color: rgb(0,160,220)
+          .icon-thumb_down
+            font-size : 12px
+            line-height : 24px
+            color: rgb(147,153,159)
+        .user
+          position: absolute
+          right:0
+          top:16px
+          .username
+            font-size : 10px
+            line-height : 12px
+            color: rgb(147,153,159)
+            margin-right : 6px
+          .avatar
+            border-radius : 50%
+        .time
+          font-size : 10px
+          line-height : 12px
+          color: rgb(147,153,159)
+
+
+
+
 
 </style>

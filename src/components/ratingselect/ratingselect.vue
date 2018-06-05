@@ -1,13 +1,13 @@
 <template>
   <div class="rating-select">
     <div class="label-wrapper">
+      <span class="label positive" :class="{active: selectType === 2}"
+            @click="chooseType(2)">{{desc.all}}<span class="num">{{ratings.length}}</span></span>
       <span class="label positive" :class="{active: selectType === 0}"
-            @click="chooseType(0)">{{desc.all}}<span class="num">{{ratings.length}}</span></span>
-      <span class="label positive" :class="{active: selectType === 1}"
-            @click="chooseType(1)">{{desc.positive}}<span
+            @click="chooseType(0)">{{desc.positive}}<span
         class="num">{{positiveRatings.length}}</span></span>
-      <span class="label negative" :class="{active: selectType === 2}"
-            @click="chooseType(2)">{{desc.negative}}<span
+      <span class="label negative" :class="{active: selectType === 1}"
+            @click="chooseType(1)">{{desc.negative}}<span
         class="num">{{negativeRatings.length}}</span></span>
     </div>
     <div class="content">
@@ -19,9 +19,9 @@
 
 <script>
 
-  const ALL = 0
-  const POSITIVE = 1
-  const NEGATIVE = 2
+  const ALL = 2;
+  const POSITIVE = 0;
+  const NEGATIVE = 1;
 
   export default {
     props: {
