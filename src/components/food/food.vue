@@ -42,14 +42,14 @@
         <div class="rating">
           <div class="title">商品评价</div>
           <ratingselect :ratings="food.ratings" :selectType="selectType"
-              :onlyContent="onlyContent" :desc="{all: '全部', positive: '推荐', negative: '吐槽'}"
-              @toggleCheck="toggleRatingCheck" @chooseType="reselectType"></ratingselect>
+                        :onlyContent="onlyContent" :desc="{all: '全部', positive: '推荐', negative: '吐槽'}"
+                        @toggleCheck="toggleRatingCheck" @chooseType="reselectType"></ratingselect>
         </div>
         <div class="no-comment" v-show="!food.ratings || !food.ratings.length">暂无评价</div>
-        <div class="comment-wrapper"  v-show="food.ratings && food.ratings.length">
+        <div class="comment-wrapper" v-show="food.ratings && food.ratings.length">
           <div class="comment-item" v-for="rating in food.ratings"
                v-show='showRating(rating)'>
-            <div class="time">{{rating.rateTime}}</div>
+            <div class="time">{{formatDate(rating.rateTime)}}</div>
             <div class="content">
               <span :class="{'icon-thumb_up': rating.rateType === 0, 'icon-thumb_down': rating.rateType === 1}"></span>
               <span class="text">{{rating.text}}</span>
@@ -72,6 +72,7 @@
   import split from 'components/split/split'
   import BScroll from 'better-scroll'
   import ratingselect from 'components/ratingselect/ratingselect'
+  import {formatDatetime} from 'common/util/dateUtil'
 
   const ALL = 2;
   const POSITIVE = 0;
@@ -136,14 +137,19 @@
       },
 
       showRating(rating){
-        if(this.onlyContent && !rating.text){
+        if (this.onlyContent && !rating.text) {
           return false
         }
-        if(rating.rateType === this.selectType || this.selectType===ALL){
+        if (rating.rateType === this.selectType || this.selectType === ALL) {
           return true
-        }else{
+        } else {
           return false
         }
+      },
+
+      formatDate(timestamp){
+        let date = new Date(timestamp)
+        return formatDatetime(date, 'yyyy-MM-dd hh:mm')
       }
     }
   }
@@ -154,8 +160,10 @@
   .move-enter-active, .move-leave-active
     transition: all .2s linear
     transform: translate3d(0, 0, 0)
+
   .move-enter, .move-leave-to
     transform: translate3d(100%, 0, 0)
+
   .food
     position: fixed
     left: 0
@@ -269,58 +277,55 @@
         line-height: 24px
         padding: 8px
     .rating
-      margin-top : 18px
+      margin-top: 18px
       .title
         font-size: 14px
         color: rgb(7, 17, 27)
         line-height: 14px
-        padding-left : 18px
+        padding-left: 18px
 
     .no-comment
-      font-size : 12px
-      line-height : 16px
-      color: rgb(7,17,27)
+      font-size: 12px
+      line-height: 16px
+      color: rgb(7, 17, 27)
       padding: 16px 18px
     .comment-wrapper
       padding: 0 18px
-      font-size : 0
+      font-size: 0
       .comment-item
         position: relative
         padding: 16px 0
-        border-bottom : 1px solid rgba(7,17,27,0.1)
+        border-bottom: 1px solid rgba(7, 17, 27, 0.1)
         .content
-          margin-top : 6px
+          margin-top: 6px
           .text
-            font-size : 12px
-            line-height : 16px
-            color: rgb(7,17,27)
-            margin-left : 4px
+            font-size: 12px
+            line-height: 16px
+            color: rgb(7, 17, 27)
+            margin-left: 4px
           .icon-thumb_up
-            font-size : 12px
-            line-height : 24px
-            color: rgb(0,160,220)
+            font-size: 12px
+            line-height: 24px
+            color: rgb(0, 160, 220)
           .icon-thumb_down
-            font-size : 12px
-            line-height : 24px
-            color: rgb(147,153,159)
+            font-size: 12px
+            line-height: 24px
+            color: rgb(147, 153, 159)
         .user
           position: absolute
-          right:0
-          top:16px
+          right: 0
+          top: 16px
           .username
-            font-size : 10px
-            line-height : 12px
-            color: rgb(147,153,159)
-            margin-right : 6px
+            font-size: 10px
+            line-height: 12px
+            color: rgb(147, 153, 159)
+            margin-right: 6px
           .avatar
-            border-radius : 50%
+            border-radius: 50%
         .time
-          font-size : 10px
-          line-height : 12px
-          color: rgb(147,153,159)
-
-
-
+          font-size: 10px
+          line-height: 12px
+          color: rgb(147, 153, 159)
 
 
 </style>
